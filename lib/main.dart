@@ -39,28 +39,33 @@ class _TodoAppState extends State<TodoApp> {
     allRow.forEach((row) { 
       myItems.add(row.toString());
       children.add(
-        Card(
-    elevation: 5.0,
+        Dismissible(
+          
+          background: Container(color: Colors.red,),
+          key: UniqueKey(),
+                  child: Card(
+    elevation: 2.0,
     margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
     child: Container(
       padding: EdgeInsets.all(5.0),
       child: ListTile(
-        title: Text(
-          row['todo']
-        ),
-        trailing: IconButton(
-          icon: Icon(Icons.delete),
-          onPressed: () {
-            dbhelper.deletedata(row['id']);
-            setState(() {
-              
-            });
-          },
-          color: Colors.red,
-        ),
-      ),
+            title: Text(
+              row['todo']
+            ),
+            trailing: IconButton(
+              icon: Icon(Icons.delete),
+              onPressed: () {
+      dbhelper.deletedata(row['id']);
+      setState(() {
+          
+      });
+              },
+              color: Colors.red,
+            ),
+          ),
     ),
-  )
+  ),
+        )
       );
     });
     return Future.value(true);
@@ -204,24 +209,6 @@ Scaffold(
   }
 }
 
-Widget myCard(String task) {
-  return Card(
-    elevation: 5.0,
-    margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-    child: Container(
-      padding: EdgeInsets.all(5.0),
-      child: ListTile(
-        title: Text('$task'),
-        trailing: IconButton(
-          icon: Icon(Icons.delete),
-          onPressed: () {
-            print('deleted');
-          },
-          color: Colors.red,
-        ),
-      ),
-    ),
-  );
-}
+
 
 
