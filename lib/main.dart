@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hive_database/dbHelper.dart';
 
 void main() {
   runApp(MyApp());
@@ -25,10 +26,20 @@ class TodoApp extends StatefulWidget {
 }
 
 class _TodoAppState extends State<TodoApp> {
+  final dbhelper = Databasehelper.instance;
   final textEditingController= TextEditingController();
   bool validated =true;
   String errText = '';
   String todoedited = '';
+
+  void addTodo()async{
+    Map<String , dynamic> row ={
+  Databasehelper.columnName : todoedited
+    };
+    final id = await dbhelper.insert(row);
+    print(id);
+    Navigator.pop(context);
+  }
 
   void showalertdialog(){
     showDialog(
@@ -47,6 +58,9 @@ class _TodoAppState extends State<TodoApp> {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             TextField(
+              onChanged: (val){
+                todoedited = val;
+              },
               controller: textEditingController,
               autofocus: true,
               decoration: InputDecoration(
@@ -72,8 +86,10 @@ class _TodoAppState extends State<TodoApp> {
    setState(() {
                         errText = 'To many characters';
                         validated= false;
-                      }
+                      } 
                       );
+                    }else{
+                      addTodo();
                     }
                   },)
               ],
