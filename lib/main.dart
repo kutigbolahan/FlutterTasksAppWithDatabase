@@ -25,11 +25,18 @@ class TodoApp extends StatefulWidget {
 }
 
 class _TodoAppState extends State<TodoApp> {
+  final textEditingController= TextEditingController();
+  bool validated =true;
+  String errText = '';
+  String todoedited = '';
 
   void showalertdialog(){
     showDialog(
       context: context,
-      builder: (context)=> AlertDialog(
+      builder: (context){
+        return StatefulBuilder(
+          builder: (BuildContext context, setState) {
+            return AlertDialog(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
@@ -40,7 +47,11 @@ class _TodoAppState extends State<TodoApp> {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             TextField(
+              controller: textEditingController,
               autofocus: true,
+              decoration: InputDecoration(
+                errorText:  validated ? null:errText
+              ),
             ),
             SizedBox(height: 10,),
             Row(
@@ -50,12 +61,29 @@ class _TodoAppState extends State<TodoApp> {
                 RaisedButton(
                   color: Colors.purple,
                   child: Text('Add',style: TextStyle( color:Colors.white,)),
-                  onPressed: (){},)
+                  onPressed: (){
+                    if (textEditingController.text.isEmpty) {
+                      setState(() {
+                        errText = 'Cant be empty';
+                        validated= false;
+                      }
+                      );
+                    }else if(textEditingController.text.length > 512){
+   setState(() {
+                        errText = 'To many characters';
+                        validated= false;
+                      }
+                      );
+                    }
+                  },)
               ],
             )
           ],
         ),
-      )
+      );
+          },
+        );
+      }
       );
   }
   @override
